@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+    <link th:href="@{css/bootstrap.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/bootstrap-theme.min.css}" rel="stylesheet"/>
+    <link th:href="@{css/community.css}" rel="stylesheet"/>
+    <script th:src="@{js/jquery-3.4.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{js/bootstrap.min.js}" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="~{navigation::nav}"></div>
+<div class="container-fluid body">
+    <div class="row main">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
+            <hr>
+            <form action="/publish" method="post">
+                <div class="form-group">
+                    <label for="title">问题标题（简明扼要）：</label>
+                    <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="问题标题……">
+                </div>
+                <div class="form-group">
+                    <label for="title">问题补充（必填，参照右侧提示）：</label>
+                    <textarea name="description" id="description" class="form-control" th:text="${description}" cols="30" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="title">问题标签</label>
+                    <input type="text" class="form-control" id="tag" name="tag" th:value="${tag}" placeholder="输入标签，以，分隔">
+                </div>
+                <span th:if="${error!=null}" class="alert alert-danger" th:text="${error}"></span>
+                <button type="submit" class="btn btn-success btn-publish">发布</button>
+            </form>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h3>问题发起指南</h3>
+            ●问题标题<br>
+            ●问题补充<br>
+            ●选择标签<br>
+        </div>
+    </div>
+</div>
+</body>
+</html>

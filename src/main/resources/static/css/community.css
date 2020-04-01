@@ -1,0 +1,19 @@
+.main{
+    background: #efefef;
+}
+
+.body{
+    background: white;
+    margin: 30px;
+}
+
+.btn-publish{
+    float: right;
+    margin-bottom: 15px;
+}
+
+.text-desc{
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
