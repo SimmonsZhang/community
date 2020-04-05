@@ -1,22 +1,34 @@
 package life.majiang.community.mapper;
 
+import java.util.List;
 import life.majiang.community.model.User;
-import org.apache.ibatis.annotations.Insert;
+import life.majiang.community.model.UserExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
 @Mapper
 @Component
 public interface UserMapper {
+    long countByExample(UserExample example);
 
-    @Insert("insert into user (name, account_id, token, gmt_create, gmt_modified,avatar_url) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
-    void insert(User user);
+    int deleteByExample(UserExample example);
 
-    @Select("select * from user where token=#{token}")
-    User findByToken(@Param("token") String token);
+    int deleteByPrimaryKey(Integer id);
 
-    @Select("select * from user where id=#{id}")
-    User findById(Integer id);
+    int insert(User record);
+
+    int insertSelective(User record);
+
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }

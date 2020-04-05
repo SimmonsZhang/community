@@ -28,8 +28,8 @@
 
     <insert id="create" parameterType="life.majiang.community.model.Question">
       insert into question
-      (id,title,description,gmt_create,gmt_modified,comment_count,view_count,like_count,tag,creator) values
-      (#{id},#{title},#{description},#{gmtCreate},#{gmtModified},#{commentCount},#{viewCount},#{likeCount},#{tag},#{creator})
+      (id,title,description,gmt_create,gmt_modified,tag,creator) values
+      (#{id},#{title},#{description},#{gmtCreate},#{gmtModified},#{tag},#{creator})
     </insert>
 
     <select id="listWithAvatar" resultMap="questionDtoMap">
@@ -65,5 +65,36 @@
         where
             q.creator = #{creator} and q.creator = u.id
     </select>
+
+    <select id="listById" resultMap="questionDtoMap" parameterType="int">
+        select
+               q.*,
+               u.id as user_id,
+               u.account_id as user_account_id,
+               u.name as user_name,
+               u.token as user_token,
+               u.gmt_create as user_gmt_create,
+               u.gmt_modified as user_gmt_modified,
+               u.bio as user_bio,
+               u.avatar_url as user_avatar_url
+        from
+             question q,user u
+        where
+              q.id=#{id} and q.creator=u.id
+    </select>
+
+    <update id="update" parameterType="life.majiang.community.model.Question">
+    <!--<update id="update" parameterMap="questionDtoMap">-->
+        update
+          question q
+        set
+            q.title=#{title},
+            q.description=#{description},
+            q.tag=#{tag},
+            q.gmt_modified=#{gmtModified}
+        where
+              q.id=#{id}
+    </update>
+    
 
 </mapper>

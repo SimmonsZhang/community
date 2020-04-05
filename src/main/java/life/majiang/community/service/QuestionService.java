@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import life.majiang.community.dto.QuestionDto;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +31,22 @@ public class QuestionService {
         List<QuestionDto> questionDtoList = questionMapper.listByCreator(userId);
 
         return new PageInfo<>(questionDtoList, 5);
+    }
+
+    public QuestionDto listById(Integer id) {
+        QuestionDto questionDto = questionMapper.listById(id);
+        return questionDto;
+    }
+
+    public void createOrUpdate(Question question) {
+        QuestionDto questionDto = questionMapper.listById(question.getId());
+        if (questionDto != null) {
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        } else {
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+        }
     }
 }
