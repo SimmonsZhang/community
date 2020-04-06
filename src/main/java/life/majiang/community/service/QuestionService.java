@@ -3,9 +3,12 @@ package life.majiang.community.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import life.majiang.community.dto.QuestionDto;
+import life.majiang.community.exception.CustomizedErrorCode;
+import life.majiang.community.exception.CustomizedException;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.model.Question;
+import life.majiang.community.model.QuestionExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,18 +38,32 @@ public class QuestionService {
 
     public QuestionDto listById(Integer id) {
         QuestionDto questionDto = questionMapper.listById(id);
+        if (questionDto == null){
+            throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
+        }
+//        Question question = new Question();
+//        question.setCommentCount(questionDto.getCommentCount()+1);
+//        QuestionExample questionExample = new QuestionExample();
+//        questionExample.createCriteria().andIdEqualTo(id);
+//        questionMapper.updateByExampleSelective(question, questionExample);
+//        questionDto = questionMapper.listById(id);
+
         return questionDto;
     }
 
     public void createOrUpdate(Question question) {
-        QuestionDto questionDto = questionMapper.listById(question.getId());
-        if (questionDto != null) {
-            question.setGmtModified(question.getGmtCreate());
-            questionMapper.update(question);
+//        QuestionDto questionDto = questionMapper.listById(question.getId());
+        Question selectedQuestion = questionMapper.selectByPrimaryKey(question.getId());
+        if (selectedQuestion != null) {
+            question.setGmtModified(System.currentTimeMillis());
+            QuestionExample questionExample = new QuestionExample();
+            questionExample.createCriteria().andIdEqualTo(question.getId());
+            if (questionMapper.updateByExampleSelective(question, questionExample) != 1)
+                throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
         } else {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            questionMapper.insertSelective(question);
         }
     }
 }

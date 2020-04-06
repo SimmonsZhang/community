@@ -24,8 +24,6 @@ public class UserService {
             updateUser.setAvatarUrl(user.getAvatarUrl());
             updateUser.setName(user.getName());
 
-            userExample.createCriteria().andIdEqualTo(user.getId());
-
             userMapper.updateByExampleSelective(updateUser, userExample);
         }
         else

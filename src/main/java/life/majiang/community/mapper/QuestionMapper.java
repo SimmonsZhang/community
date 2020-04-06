@@ -1,26 +1,48 @@
 package life.majiang.community.mapper;
 
+import java.util.List;
+
 import life.majiang.community.dto.QuestionDto;
 import life.majiang.community.model.Question;
+import life.majiang.community.model.QuestionExample;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Mapper
 @Component
 public interface QuestionMapper {
-//    @Insert("insert into question (title,description,gmt_create,gmt_modified,creator,tag) " +
-//            "values (#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
-    void create(Question question);
+    long countByExample(QuestionExample example);
 
-//    @Select({"select u.avatar_url as avatar_url,q.* from question q,user u where q.creator=u.id"})
-    List<QuestionDto> listWithAvatar();
+    int deleteByExample(QuestionExample example);
 
-//    @Select("select u.avatar_url as avatar_url,q.* from question q,user u where q.creator=#{creator} and u.id=q.creator")
-    List<QuestionDto> listByCreator(Integer creator);
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(Question record);
+
+    int insertSelective(Question record);
+
+    List<Question> selectByExampleWithBLOBs(QuestionExample example);
+
+    List<Question> selectByExample(QuestionExample example);
+
+    Question selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") Question record, @Param("example") QuestionExample example);
+
+    int updateByExampleWithBLOBs(@Param("record") Question record, @Param("example") QuestionExample example);
+
+    int updateByExample(@Param("record") Question record, @Param("example") QuestionExample example);
+
+    int updateByPrimaryKeySelective(Question record);
+
+    int updateByPrimaryKeyWithBLOBs(Question record);
+
+    int updateByPrimaryKey(Question record);
 
     QuestionDto listById(Integer id);
 
-    void update(Question question);
+    List<QuestionDto> listByCreator(@Param("creator") Integer userId);
+
+    List<QuestionDto> listWithAvatar();
 }
