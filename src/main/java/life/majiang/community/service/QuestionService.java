@@ -41,12 +41,6 @@ public class QuestionService {
         if (questionDto == null){
             throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
         }
-//        Question question = new Question();
-//        question.setCommentCount(questionDto.getCommentCount()+1);
-//        QuestionExample questionExample = new QuestionExample();
-//        questionExample.createCriteria().andIdEqualTo(id);
-//        questionMapper.updateByExampleSelective(question, questionExample);
-//        questionDto = questionMapper.listById(id);
 
         return questionDto;
     }
@@ -65,5 +59,14 @@ public class QuestionService {
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insertSelective(question);
         }
+    }
+
+    public void incViewCount(Integer id) {
+        //增加浏览次数comment_count
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        if (questionMapper.incViewCount(question) != 1)
+            throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
     }
 }

@@ -45,4 +45,8 @@ public interface QuestionMapper {
     List<QuestionDto> listByCreator(@Param("creator") Integer userId);
 
     List<QuestionDto> listWithAvatar();
+
+    int incViewCount(Question record);
+
+    void incCommentCount(Question question);
 }

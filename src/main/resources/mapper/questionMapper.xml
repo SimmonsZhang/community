@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="life.majiang.community.mapper.QuestionMapper">
+  <!--自动生成-->
   <resultMap id="BaseResultMap" type="life.majiang.community.model.Question">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
@@ -338,6 +339,9 @@
       creator = #{creator,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+  <!--自定义-->
     <resultMap id="questionDtoMap" type="life.majiang.community.dto.QuestionDto">
         <id column="id" property="id" />
         <result column="title" property="title" />
@@ -430,6 +434,17 @@
         where
               q.id=#{id}
     </update>
-    
+
+  <update id="incViewCount" parameterType="life.majiang.community.model.Question">
+    update question
+    set view_count = view_count + #{viewCount}
+    where id=#{id}
+  </update>
+
+  <update id="incCommentCount" parameterType="life.majiang.community.model.Question">
+    update question
+    set comment_count=comment_count+#{commentCount}
+    where id=#{id}
+  </update>
 
 </mapper>
