@@ -66,7 +66,7 @@ public class CommentController {
      * @return ResultDTO对象的json，data域中存着所有二级评论
      */
     @ResponseBody
-    @RequestMapping(value = "comment/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "comment/{id}", method = RequestMethod.GET)
     public ResultDTO<List> subComment(@PathVariable(value = "id") Long id){
         List<CommentDTO> commentDTOS = commentService.listByParentId(id, CommentTypeEnum.COMMENT);
         return ResultDTO.okOf(commentDTOS);

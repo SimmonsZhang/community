@@ -63,22 +63,49 @@ function collapseComment(e) {
         comments.removeClass("in");
         e.classList.remove("active");
     }else {     //展开二级评论
-        //1.获取后端传来的ResultDTO json串
-        // $.getJSON("/comment/"+id, function (data) {
-        //     console.log(data);
-        //     var commentBody = $("comment-body-"+id);
-        //     var items = [];
-        //     // commentBody.appendChild();
-        //
-        //     $.each(data.data, function (comment) {
-        //        items.push();
-        //     });
-        //     $("<div/>", {
-        //         "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments",
-        //         "id": "sub-comment-"+id,
-        //         html: items.join("")
-        //     }).appendTo(commentBody);
-        // });
+        var subCommentContainer = $("#comment-"+id);
+        if ($(subCommentContainer).children().length <= 1) {
+            // 1.获取后端传来的ResultDTO json串
+            $.getJSON("/comment/"+id, function (data) {
+                console.log(id);
+                console.log(data);
+
+                $.each(data.data.reverse(), function (index, comment) {
+                    var mediaLeftElement = $("<div/>", {
+                        "class": "media-left"
+                    }).append($("<img/>", {
+                        "class": "media-object img-rounded",
+                        "width": "40",
+                        "src": comment.user.avatarUrl
+                    }));
+
+                    var mediaBodyElement = $("<div/>", {
+                        "class": "media-body"
+                    }).append($("<h5/>", {
+                        "class": "media-heading",
+                        "html": comment.user.name+"："
+                    })).append($("<div/>", {
+                        "html": comment.content
+                    })).append($("<div/>", {
+                        "class": "menu"
+                    }).append($("<span/>", {
+                        "class": "pull-right",
+                        "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
+                    })));
+
+                    var mediaElement = $("<div/>", {
+                        "class": "media"
+                    }).append(mediaLeftElement).append(mediaBodyElement);
+
+                    var commentElement = $("<div/>", {
+                        "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comment"
+                    }).append(mediaElement).append($("<hr>", {"style": "margin-bottom: 0;margin-top: 10px"}));
+
+                    subCommentContainer.prepend(commentElement);
+                });
+            });
+        }
+
         //2.展开二级评论
         comments.addClass("in");
         e.classList.add("active");
