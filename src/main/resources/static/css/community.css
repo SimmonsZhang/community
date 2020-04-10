@@ -11,6 +11,10 @@
     float: right;
     margin-bottom: 15px;
 }
+.btn-comment{
+    float: right;
+    margin: 8px;
+}
 
 .text-desc{
     font-size: 12px;
@@ -21,4 +25,33 @@
 .community-menu{
     color: #999;
     font-size: 13px;
+}
+.comment{
+    margin: 10px 0;
+}
+.sub-comments {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+    padding-top: 10px;
+    padding-right: 35px;
+}
+.sub-comments .btn {
+    margin: 10px 0;
+}
+
+.menu {
+    color: #999;
+}
+.menu .icon {
+    margin-left: 12px;
+    margin-top: 8px;
+    cursor: pointer;
+}
+.menu .active {
+    color: #499e3f;
+}
+.menu .icon:hover{
+    color: #499ef3;
 }

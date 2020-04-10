@@ -1,27 +1,34 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.dto.CommentCreateDTO;
+import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.dto.ResultDTO;
+import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizedErrorCode;
-import life.majiang.community.mapper.CommentMapper;
 import life.majiang.community.model.Comment;
 import life.majiang.community.model.User;
 import life.majiang.community.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 添加评论
+     * 包括一级评论和二级评论
+     * @param commentCreateDTO 根据页面comment封装的对象
+     *                         包含parentId、content和type信息
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "comment", method = RequestMethod.POST)
     public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
@@ -51,5 +58,17 @@ public class CommentController {
         commentService.insertSelective(comment);
 
         return ResultDTO.okOf();
+    }
+
+    /**
+     * 展示一级评论下的二级评论
+     * @param id parentId 一级评论的id
+     * @return ResultDTO对象的json，data域中存着所有二级评论
+     */
+    @ResponseBody
+    @RequestMapping(value = "comment/{id}", method = RequestMethod.POST)
+    public ResultDTO<List> subComment(@PathVariable(value = "id") Long id){
+        List<CommentDTO> commentDTOS = commentService.listByParentId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOS);
     }
 }

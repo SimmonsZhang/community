@@ -1,5 +1,6 @@
 package life.majiang.community.service;
 
+import life.majiang.community.dto.CommentDTO;
 import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.exception.CustomizedErrorCode;
 import life.majiang.community.exception.CustomizedException;
@@ -9,6 +10,9 @@ import life.majiang.community.model.Comment;
 import life.majiang.community.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -17,6 +21,7 @@ public class CommentService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Transactional
     public void insertSelective(Comment comment) {
         //parentId为null 或 0 (不合法)
         //parentId指的是被评论的question/comment的id
@@ -45,5 +50,10 @@ public class CommentService {
             question.setId(dbQuestion.getId());
             questionMapper.incCommentCount(question);
         }
+    }
+
+    public List<CommentDTO> listByParentId(Long id, CommentTypeEnum commentTypeEnum) {
+        List<CommentDTO> commentDTOs = commentMapper.listByParentId(id, commentTypeEnum);
+        return commentDTOs;
     }
 }

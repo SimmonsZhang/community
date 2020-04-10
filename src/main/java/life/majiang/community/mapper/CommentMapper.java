@@ -1,6 +1,9 @@
 package life.majiang.community.mapper;
 
 import java.util.List;
+
+import life.majiang.community.dto.CommentDTO;
+import life.majiang.community.enums.CommentTypeEnum;
 import life.majiang.community.model.Comment;
 import life.majiang.community.model.CommentExample;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,4 +34,6 @@ public interface CommentMapper {
     int updateByPrimaryKeySelective(Comment record);
 
     int updateByPrimaryKey(Comment record);
+
+    List<CommentDTO> listByParentId(Long id, CommentTypeEnum commentTypeEnum);
 }

@@ -1,7 +1,5 @@
 package life.majiang.community.enums;
 
-import lombok.Data;
-
 public enum CommentTypeEnum {
     QUESTION(1),
     COMMENT(2);

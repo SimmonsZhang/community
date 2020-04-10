@@ -14,6 +14,10 @@ public class ResultDTO<T> {
         return ResultDTO.errorOf(errorCode.getCode(), errorCode.getMessage());
     }
 
+    public static ResultDTO errorOf(CustomizedException ex) {
+        return ResultDTO.errorOf(ex.getCode(), ex.getMessage());
+    }
+
     private static ResultDTO errorOf(Integer code, String message) {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setCode(code);
@@ -22,14 +26,18 @@ public class ResultDTO<T> {
         return resultDTO;
     }
 
-    public static ResultDTO errorOf(CustomizedException ex) {
-        return ResultDTO.errorOf(ex.getCode(), ex.getMessage());
-    }
-
     public static ResultDTO okOf() {
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setCode(200);
         resultDTO.setMessage("操作成功！");
+        return resultDTO;
+    }
+
+    public static <T> ResultDTO okOf(T t){
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setCode(200);
+        resultDTO.setMessage("操作成功！");
+        resultDTO.setData(t);
         return resultDTO;
     }
 }

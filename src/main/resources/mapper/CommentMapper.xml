@@ -255,4 +255,35 @@
       content = #{content,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <!--下面为自定义部分-->
+  <resultMap id="CommentDTOMap" type="life.majiang.community.dto.CommentDTO" extends="BaseResultMap">
+    <association property="user" javaType="life.majiang.community.model.User">
+      <id column="user_id" property="id" />
+      <result column="user_account_id" property="accountId" />
+      <result column="user_name" property="name" />
+      <result column="user_token" property="token" />
+      <result column="user_gmt_create" property="gmtCreate" />
+      <result column="user_gmt_modified" property="gmtModified" />
+      <result column="user_bio" property="bio" />
+      <result column="user_avatar_url" property="avatarUrl" />
+    </association>
+  </resultMap>
+  <select id="listByParentId" parameterType="map" resultMap="CommentDTOMap">
+    select
+           c.*,
+           u.id user_id,
+           u.account_id user_account_id,
+           u.name user_name,
+           u.token user_token,
+           u.gmt_create user_gmt_create,
+           u.gmt_modified user_gmt_modified,
+           u.bio user_bio,
+           u.avatar_url user_avatar_url
+    from
+         comment c,user u
+    where
+          c.type=#{commentTypeEnum.type} and c.parent_id=#{id} and c.commentator=u.id
+    order by c.gmt_create desc
+  </select>
 </mapper>
