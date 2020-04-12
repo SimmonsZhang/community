@@ -36,4 +36,6 @@ public interface CommentMapper {
     int updateByPrimaryKey(Comment record);
 
     List<CommentDTO> listByParentId(Long id, CommentTypeEnum commentTypeEnum);
+
+    int incCommentCount(Comment exampleComment);
 }

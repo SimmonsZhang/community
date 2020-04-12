@@ -39,8 +39,12 @@ public class CommentService {
                 throw new CustomizedException(CustomizedErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insertSelective(comment);
+            Comment exampleComment = new Comment();
+            exampleComment.setId(comment.getParentId());
+            exampleComment.setCommentCount(1);
+            commentMapper.incCommentCount(exampleComment);
         }else {     /* 对question的评论 */
-            Question dbQuestion = questionMapper.selectByPrimaryKey(Math.toIntExact(comment.getParentId()));
+            Question dbQuestion = questionMapper.selectByPrimaryKey(comment.getParentId());
             if (dbQuestion == null){
                 throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
             }

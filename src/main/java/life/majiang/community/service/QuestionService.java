@@ -36,7 +36,7 @@ public class QuestionService {
         return new PageInfo<>(questionDtoList, 5);
     }
 
-    public QuestionDto listById(Integer id) {
+    public QuestionDto listById(Long id) {
         QuestionDto questionDto = questionMapper.listById(id);
         if (questionDto == null){
             throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
@@ -61,12 +61,18 @@ public class QuestionService {
         }
     }
 
-    public void incViewCount(Integer id) {
+    public void incViewCount(Long id) {
         //增加浏览次数comment_count
         Question question = new Question();
         question.setId(id);
         question.setViewCount(1);
         if (questionMapper.incViewCount(question) != 1)
             throw new CustomizedException(CustomizedErrorCode.QUESTION_NOT_FOUND);
+    }
+
+    public List<QuestionDto> listRelatedQuestionDto(QuestionDto questionDto) {
+        String tags = questionDto.getTag().replace(',', '|');
+        List<QuestionDto> questionDtos = questionMapper.selectByTag(questionDto.getId(), tags);
+        return questionDtos;
     }
 }

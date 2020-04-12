@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="life.majiang.community.mapper.QuestionMapper">
-  <!--自动生成-->
   <resultMap id="BaseResultMap" type="life.majiang.community.model.Question">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" jdbcType="BIGINT" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
     <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
@@ -111,17 +110,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
     select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
     from question
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from question
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </delete>
   <delete id="deleteByExample" parameterType="life.majiang.community.model.QuestionExample">
     delete from question
@@ -134,7 +133,7 @@
       gmt_modified, comment_count, view_count, 
       like_count, tag, creator, 
       description)
-    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, 
       #{gmtModified,jdbcType=BIGINT}, #{commentCount,jdbcType=INTEGER}, #{viewCount,jdbcType=INTEGER}, 
       #{likeCount,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}, #{creator,jdbcType=INTEGER}, 
       #{description,jdbcType=LONGVARCHAR})
@@ -175,7 +174,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id,jdbcType=BIGINT},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -216,7 +215,7 @@
     update question
     <set>
       <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+        id = #{record.id,jdbcType=BIGINT},
       </if>
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
@@ -252,7 +251,7 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update question
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
       title = #{record.title,jdbcType=VARCHAR},
       gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
       gmt_modified = #{record.gmtModified,jdbcType=BIGINT},
@@ -268,7 +267,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update question
-    set id = #{record.id,jdbcType=INTEGER},
+    set id = #{record.id,jdbcType=BIGINT},
       title = #{record.title,jdbcType=VARCHAR},
       gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
       gmt_modified = #{record.gmtModified,jdbcType=BIGINT},
@@ -312,7 +311,7 @@
         description = #{description,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="life.majiang.community.model.Question">
     update question
@@ -325,7 +324,7 @@
       tag = #{tag,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=INTEGER},
       description = #{description,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="life.majiang.community.model.Question">
     update question
@@ -337,11 +336,11 @@
       like_count = #{likeCount,jdbcType=INTEGER},
       tag = #{tag,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
   </update>
 
 
-  <!--自定义-->
+    <!--自定义-->
     <resultMap id="questionDtoMap" type="life.majiang.community.dto.QuestionDto">
         <id column="id" property="id" />
         <result column="title" property="title" />
@@ -366,85 +365,96 @@
     </resultMap>
 
     <insert id="create" parameterType="life.majiang.community.model.Question">
-      insert into question
-      (id,title,description,gmt_create,gmt_modified,tag,creator) values
-      (#{id},#{title},#{description},#{gmtCreate},#{gmtModified},#{tag},#{creator})
+        insert into question
+            (id, title, description, gmt_create, gmt_modified, tag, creator)
+        values (#{id}, #{title}, #{description}, #{gmtCreate}, #{gmtModified}, #{tag}, #{creator})
     </insert>
 
     <select id="listWithAvatar" resultMap="questionDtoMap">
-      select
-             q.*,
-             u.id as user_id,
-             u.account_id as user_account_id,
-             u.name as user_name,
-             u.token as user_token,
-             u.gmt_create as user_gmt_create,
-             u.gmt_modified as user_gmt_modified,
-             u.bio as user_bio,
-             u.avatar_url as user_avatar_url
-      from
-           question q,user u
-      where
-            q.creator = u.id
+        select q.*,
+               u.id           as user_id,
+               u.account_id   as user_account_id,
+               u.name         as user_name,
+               u.token        as user_token,
+               u.gmt_create   as user_gmt_create,
+               u.gmt_modified as user_gmt_modified,
+               u.bio          as user_bio,
+               u.avatar_url   as user_avatar_url
+        from question q,
+             user u
+        where q.creator = u.id order by q.gmt_modified desc
     </select>
 
     <select id="listByCreator" parameterType="int" resultMap="questionDtoMap">
-        select
-            q.*,
-            u.id as user_id,
-            u.account_id as user_account_id,
-            u.name as user_name,
-            u.token as user_token,
-            u.gmt_create as user_gmt_create,
-            u.gmt_modified as user_gmt_modified,
-            u.bio as user_bio,
-            u.avatar_url as user_avatar_url
-        from
-            question q,user u
-        where
-            q.creator = #{creator} and q.creator = u.id
+        select q.*,
+               u.id           as user_id,
+               u.account_id   as user_account_id,
+               u.name         as user_name,
+               u.token        as user_token,
+               u.gmt_create   as user_gmt_create,
+               u.gmt_modified as user_gmt_modified,
+               u.bio          as user_bio,
+               u.avatar_url   as user_avatar_url
+        from question q,
+             user u
+        where q.creator = #{creator}
+          and q.creator = u.id
     </select>
 
-    <select id="listById" parameterType="int" resultMap="questionDtoMap">
-        select
-               q.*,
-               u.id as user_id,
-               u.account_id as user_account_id,
-               u.name as user_name,
-               u.token as user_token,
-               u.gmt_create as user_gmt_create,
+    <select id="listById" parameterType="long" resultMap="questionDtoMap">
+        select q.*,
+               u.id           as user_id,
+               u.account_id   as user_account_id,
+               u.name         as user_name,
+               u.token        as user_token,
+               u.gmt_create   as user_gmt_create,
                u.gmt_modified as user_gmt_modified,
-               u.bio as user_bio,
-               u.avatar_url as user_avatar_url
-        from
-             question q,user u
-        where
-              q.id=#{id} and q.creator=u.id
+               u.bio          as user_bio,
+               u.avatar_url   as user_avatar_url
+        from question q,
+             user u
+        where q.id = #{id}
+          and q.creator = u.id
+    </select>
+    <!--根据tag查找相关问题-->
+    <select id="selectByTag" parameterType="map" resultMap="questionDtoMap">
+        select q.*,
+               u.id           as user_id,
+               u.account_id   as user_account_id,
+               u.name         as user_name,
+               u.token        as user_token,
+               u.gmt_create   as user_gmt_create,
+               u.gmt_modified as user_gmt_modified,
+               u.bio          as user_bio,
+               u.avatar_url   as user_avatar_url
+        from question q,
+             user u
+        where q.id!=#{id} and q.creator=u.id and q.tag regexp #{tag}
     </select>
 
     <update id="update" parameterType="life.majiang.community.model.Question">
-    <!--&lt;update id="update" parameterMap="questionDtoMap"&gt;-->
+        <!--&amp;lt;update id="update" parameterMap="questionDtoMap"&amp;gt;-->
         update
-          question q
+        question q
         set
-            q.title=#{title},
-            q.description=#{description},
-            q.tag=#{tag},
-            q.gmt_modified=#{gmtModified}
+        q.title=#{title},
+        q.description=#{description},
+        q.tag=#{tag},
+        q.gmt_modified=#{gmtModified}
         where
-              q.id=#{id}
+        q.id=#{id}
     </update>
 
-  <update id="incViewCount" parameterType="life.majiang.community.model.Question">
-    update question
-    set view_count = view_count + #{viewCount}
-    where id=#{id}
-  </update>
+    <update id="incViewCount" parameterType="life.majiang.community.model.Question">
+        update question
+        set view_count = view_count + #{viewCount}
+        where id = #{id}
+    </update>
 
-  <update id="incCommentCount" parameterType="life.majiang.community.model.Question">
-    update question
-    set comment_count=comment_count+#{commentCount}
-    where id=#{id}
-  </update>
+    <update id="incCommentCount" parameterType="life.majiang.community.model.Question">
+        update question
+        set comment_count=comment_count + #{commentCount}
+        where id = #{id}
+    </update>
 
 </mapper>

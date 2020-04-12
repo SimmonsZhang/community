@@ -16,7 +16,7 @@ public interface QuestionMapper {
 
     int deleteByExample(QuestionExample example);
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Question record);
 
@@ -26,7 +26,7 @@ public interface QuestionMapper {
 
     List<Question> selectByExample(QuestionExample example);
 
-    Question selectByPrimaryKey(Integer id);
+    Question selectByPrimaryKey(Long id);
 
     int updateByExampleSelective(@Param("record") Question record, @Param("example") QuestionExample example);
 
@@ -40,13 +40,16 @@ public interface QuestionMapper {
 
     int updateByPrimaryKey(Question record);
 
-    QuestionDto listById(Integer id);
-
-    List<QuestionDto> listByCreator(@Param("creator") Integer userId);
 
     List<QuestionDto> listWithAvatar();
 
-    int incViewCount(Question record);
+    List<QuestionDto> listByCreator(Integer creator);
+
+    QuestionDto listById(Long id);
+
+    int incViewCount(Question question);
+
+    List<QuestionDto> selectByTag(Long id, String tag);
 
     void incCommentCount(Question question);
 }
